@@ -28,7 +28,11 @@
                     <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update=":form:msgs"/>
                     <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update=":form:msgs"/>
                     <p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}" update=":form:msgs"/>
-
+                    <p:headerRow field="#{product.name}" groupBy="#{product}">
+                        <p:column colspan="4" style="text-align:left">
+                            <h:outputText value="#{product.name}" />
+                        </p:column>
+                    </p:headerRow>
                     <p:column id="productnamecolumnid" headerText="Name" sortBy="#{product}" sortOrder="#{dtSortView.sortOrderName}"
                               sortFunction="#{dtSortView.sortByNameAndCodeLong}">
                         <h:outputText value="#{product.name}" />

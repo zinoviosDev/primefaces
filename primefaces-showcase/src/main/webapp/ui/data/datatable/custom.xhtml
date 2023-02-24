@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <h1>Hello, World!</h1>
+    <ui:define name="implementation">
+        <h:form id="form">
+            <p:dataTable id="datatableId"
+                         value="#{dtCustomView.list}"
+                    var="item"
+            >
+                <p:headerRow field="#{item.category}" groupBy="#{item.category}">
+                    <p:column colspan="4" style="text-align:left">
+                        <h:outputText value="#{item.category}" />
+                    </p:column>
+                </p:headerRow>
+                <p:column id="itemcategorycolumnid"  headerText="Category" sortBy="#{item.category}" sortOrder="asc" sortFunction="#{dtCustomView.categorySort}">
+                    <h:outputText value="#{item.category}"/>
+                </p:column>
+                <p:column headerText="Name" sortBy="#{item.name}">
+                    <h:outputText value="#{item.name}"/>
+                </p:column>
+                <p:column headerText="Price" sortBy="#{item.price}">
+                    <h:outputText value="#{item.price}"/>
+                </p:column>
+                <p:column headerText="Quantity" sortBy="#{item.quantity}">
+                    <h:outputText value="#{item.quantity}"/>
+                </p:column>
+                <p:column headerText="Total">
+                    <h:outputText value="#{item.price * item.quantity}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

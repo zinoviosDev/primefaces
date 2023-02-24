@@ -65,35 +65,40 @@ public class SortView implements Serializable {
         products1 = service.getProducts(10);
         products2 = service.getProducts(10);
         products3 = service.getProducts(50);
-        products.add(new Product(2001, "aaaaaa", 45L, "Black Watch", "Product Description", "black-watch.jpg", 12,
+        products.add(new Product(45, 45L, "Black Watch", "Product Description", "black-watch.jpg", 12,
                 "Accessories", 11, InventoryStatus.INSTOCK, 4));
-        products.add(new Product(2002, "bbbbbb", 4L, "Black Watch", "Product Description", "black-watch.jpg", 22,
+        products.add(new Product(48, 4L, "Black Watch", "Product Description", "black-watch.jpg", 22,
                 "Accessories", 12, InventoryStatus.INSTOCK, 4));
-        products.add(new Product(2003, "cccccc", 445L,"Black Watch", "Product Description", "black-watch.jpg", 32,
+        products.add(new Product(47, 445L, "Black Watch", "Product Description", "black-watch.jpg", 32,
                 "Accessories", 13, InventoryStatus.INSTOCK, 4));
         Collections.sort(products);
     }
-
     public List<Product> getProducts() {
+
         return products;
     }
     public List<Product> getProducts1() {
+
         return products1;
     }
 
     public List<Product> getProducts2() {
+
         return products2;
     }
 
     public List<Product> getProducts3() {
+
         return products3;
     }
 
     public List<SortMeta> getSortBy() {
+
         return sortBy;
     }
 
     public void setService(ProductService service) {
+
         this.service = service;
     }
 
@@ -130,21 +135,41 @@ public class SortView implements Serializable {
     }
 
     public int sortByNameAndCodeLong(Product data1, Product data2) {
-        if (data1 == null && data2 == null) { return 0; }
-        if (data1 == null) { return -1; }
-        if (data2 == null) { return 1; }
-        if (data1.getName() == null && data2.getName() == null) { return 0; }
-        if (data1.getName() == null) { return -1; }
-        if (data2.getName() == null) { return 1; }
+        if (data1 == null && data2 == null) {
+            return 0;
+        }
+        if (data1 == null) {
+            return -1;
+        }
+        if (data2 == null) {
+            return 1;
+        }
+        if (data1.getName() == null && data2.getName() == null) {
+            return 0;
+        }
+        if (data1.getName() == null) {
+            return -1;
+        }
+        if (data2.getName() == null) {
+            return 1;
+        }
 
         SortOrder sortOrder = this.table.getSortByAsMap().get("form:table:productnamecolumnid").getOrder();
         int result =  data1.getName().compareTo(data2.getName());
-        if(result == 0) {
+        if (result == 0) {
             int result2 = -3;
-            if (data1.getCodeLong() == null && data2.getCodeLong() == null) { result2 = 0; }
-            else if (data1.getCodeLong() == null) { result2 = -1; }
-            else if (data2.getCodeLong() == null) { result2 = 1; }
-            else {result2 = data1.getCodeLong().compareTo(data2.getCodeLong()); }
+            if (data1.getCodeLong() == null && data2.getCodeLong() == null) {
+                result2 = 0;
+            }
+            else if (data1.getCodeLong() == null) {
+                result2 = -1;
+            }
+            else if (data2.getCodeLong() == null) {
+                result2 = 1;
+            }
+            else {
+                result2 = data1.getCodeLong().compareTo(data2.getCodeLong());
+            }
             result = (sortOrder == SortOrder.DESCENDING) ? -result2 : result2;
         }
         return result;

@@ -142,18 +142,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Barcode -->
-        <dependency>
-            <groupId>io.nayuki</groupId>
-            <artifactId>qrcodegen</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.barcode4j</groupId>
-            <artifactId>barcode4j-light</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Test  -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

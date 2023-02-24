@@ -58,15 +58,15 @@ public class Product implements Serializable, Comparable<Product> {
         this.rating = rating;
     }
 
-    public Product(int id, String code, Long codeLong, String name, String description, String image, double price, String category, int quantity,
+    public Product(int id, Long codeLong, String name, String description, String image, double price, String category, int quantity,
                    InventoryStatus inventoryStatus, int rating) {
-        this(id, code, name, description, image, price, category, quantity, inventoryStatus, rating);
+        this(id, "", name, description, image, price, category, quantity, inventoryStatus, rating);
         this.codeLong = codeLong;
     }
 
     @Override
     public Product clone() {
-        return new Product(getId(), getCode(), getCodeLong(), getName(), getDescription(), getImage(), getPrice(), getCategory(), getQuantity(),
+        return new Product(getId(), getCodeLong(), getName(), getDescription(), getImage(), getPrice(), getCategory(), getQuantity(),
                 getInventoryStatus(), getRating());
     }
 
