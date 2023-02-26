@@ -11,7 +11,6 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Named("dtCustomView")
 @ViewScoped
@@ -20,6 +19,8 @@ public class CustomView implements Serializable  {
     private List<Item> list;
 
     private DataTable table;
+
+    private FacesContext context = FacesContext.getCurrentInstance();
 
     @PostConstruct
     public void init() {
@@ -38,28 +39,51 @@ public class CustomView implements Serializable  {
     }
 
     public void setList(List<Item> list) {
+
         this.list = list;
     }
 
-    public int categorySort(Object cat1, Object cat2) {
-        String category1 = (String)cat1;
-        String category2 = (String)cat2;
-        FacesContext context = FacesContext.getCurrentInstance();
+    public int categorySort(Item item1, Item item2) {
         String sortField = context.getExternalContext().getRequestParameterMap().get("form:datatableId_sortKey");
-        String sortOrder = context.getExternalContext().getRequestParameterMap().get("form:datatableId_sortDir");
+        SortOrder sortOrder = SortOrder.of(context.getExternalContext().getRequestParameterMap().get("form:datatableId_sortDir"));
 
-        if (sortField != null && sortField.contains("itemcategorycolumnid")) {
-            if (sortOrder != null && Integer.valueOf(sortOrder) < 0 ) {
-                // Tri décroissant
-                return category2.compareTo(category1);
-            } else {
-                // Tri croissant
-                return category1.compareTo(category2);
-            }
-        } else {
-            // La colonne n'est pas triée par 'Category', retourner 0 pour ne pas modifier l'ordre
+        if (item1 == null && item2 == null) {
             return 0;
         }
+        if (item1 == null) {
+            return -1;
+        }
+        if (item2 == null) {
+            return 1;
+        }
+        if (item1.getCategory() == null && item2.getCategory() == null) {
+            return 0;
+        }
+        if (item1.getCategory() == null) {
+            return -1;
+        }
+        if (item2.getCategory() == null) {
+            return 1;
+        }
+        int result =  item1.getCategory().compareTo(item2.getCategory());
+        result = (sortOrder == SortOrder.DESCENDING) ? -result : result;
+        /*if (result == 0) {
+            int result2 = -3;
+            if (item1.getName() == null && item2.getName() == null) {
+                result2 = 0;
+            }
+            else if (item1.getName() == null) {
+                result2 = -1;
+            }
+            else if (item2.getName() == null) {
+                result2 = 1;
+            }
+            else {
+                result2 = item1.getName().compareTo(item2.getName());
+            }
+            result = (sortOrder == SortOrder.DESCENDING) ? -result2 : result2;
+        }*/
+        return result;
     }
 
     public DataTable getTable() {

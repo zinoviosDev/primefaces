@@ -1,25 +1,33 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <h1>Hello, World!</h1>
     <ui:define name="implementation">
         <h:form id="form">
-            <p:dataTable id="datatableId"
-                         value="#{dtCustomView.list}"
+            <p:dataTable
+                    id="datatableId"
+                    value="#{dtCustomView.list}"
                     var="item"
             >
-                <p:headerRow field="#{item.category}" groupBy="#{item.category}">
+                <!--p:headerRow groupBy="#{item.category}">
                     <p:column colspan="4" style="text-align:left">
                         <h:outputText value="#{item.category}" />
                     </p:column>
-                </p:headerRow>
-                <p:column id="itemcategorycolumnid"  headerText="Category" sortBy="#{item.category}" sortOrder="asc" sortFunction="#{dtCustomView.categorySort}">
+                </p:headerRow-->
+                <p:column id="itemcategorycolumnid"
+                          headerText="Category"
+                          sortBy="#{item}"
+                          sortFunction="#{dtCustomView.categorySort}"
+                          sortOrder="asc"
+                >
                     <h:outputText value="#{item.category}"/>
                 </p:column>
-                <p:column headerText="Name" sortBy="#{item.name}">
+                <p:column
+                        headerText="Name"
+                        sortBy="#{item.name}"
+                >
                     <h:outputText value="#{item.name}"/>
                 </p:column>
                 <p:column headerText="Price" sortBy="#{item.price}">

@@ -1,8 +1,9 @@
 package org.primefaces.showcase.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-public class Item implements Serializable {
+public class Item implements Serializable, Comparable<Item> {
 
     private int id;
     private String category;
@@ -62,5 +63,36 @@ public class Item implements Serializable {
 
     public double getTotal() {
         return price * quantity;
+    }
+
+    @Override
+    public int compareTo(Item o) {
+        if (o == null || this.category == null) {
+            return 1;
+        }
+        if (o.category == null) {
+            return -1;
+        }
+        int result = this.category.compareTo(o.category);
+        if (result == 0) {
+            if (o.name == null || this.name == null) {
+                return this.name == null ? (o.name == null ? 0 : 1) : -1;
+            }
+            result = this.name.compareTo(o.name);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Objects.equals(category, item.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(category);
     }
 }

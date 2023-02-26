@@ -23,7 +23,6 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.SortMeta;
@@ -39,8 +38,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Named("dtSortView")
 @ViewScoped
@@ -52,12 +53,8 @@ public class SortView implements Serializable {
     private List<Product> products3;
     private List<SortMeta> sortBy;
 
-    private DataTable table;
-
     @Inject
     private ProductService service;
-
-    private final SortOrder sortOrderName = SortOrder.ASCENDING;
 
     @PostConstruct
     public void init() {
@@ -71,8 +68,29 @@ public class SortView implements Serializable {
                 "Accessories", 12, InventoryStatus.INSTOCK, 4));
         products.add(new Product(47, 445L, "Black Watch", "Product Description", "black-watch.jpg", 32,
                 "Accessories", 13, InventoryStatus.INSTOCK, 4));
-        Collections.sort(products);
+        //Collections.sort(products);
+        sortBy = new ArrayList<>();
+        sortBy.add(SortMeta.builder()
+                .field("name")
+                .order(SortOrder.ASCENDING)
+                .priority(2)
+                .build());
+
+        sortBy.add(SortMeta.builder()
+                .field("codeLong")
+                .order(SortOrder.ASCENDING)
+                .priority(1)
+                .build());
+        Map<String, List<Product>> groupedProducts = products.stream()
+                .collect(Collectors.groupingBy(Product::getName));
+        groupedProducts.forEach((name, productList) -> {
+            Product product = new Product();
+            product.setName(name);
+            products.add(product);
+            products.addAll(productList);
+        });
     }
+
     public List<Product> getProducts() {
 
         return products;
@@ -123,7 +141,7 @@ public class SortView implements Serializable {
     }
 
     public int sortByNameAndCode(Product data1, Product data2) {
-        SortOrder sortOrder = this.table.getSortByAsMap().get("form:table:productnamecolumnid").getOrder();
+        SortOrder sortOrder = SortOrder.of(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("form:datatableId_sortDir"));
         int result = data1.getName().compareTo(data2.getName());
         if (result == 0 && sortOrder == SortOrder.DESCENDING) {
             int result2 = data1.getCode().compareTo(data2.getCode());
@@ -132,6 +150,11 @@ public class SortView implements Serializable {
             }
         }
         return result;
+    }
+
+    public int sortHeaderRow(Object a, Object b) {
+        System.out.println(a.toString());
+        return 0;
     }
 
     public int sortByNameAndCodeLong(Product data1, Product data2) {
@@ -153,8 +176,8 @@ public class SortView implements Serializable {
         if (data2.getName() == null) {
             return 1;
         }
-
-        SortOrder sortOrder = this.table.getSortByAsMap().get("form:table:productnamecolumnid").getOrder();
+        String sortOrderString = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("form:datatableId_sortDir");
+        SortOrder sortOrder = (sortOrderString != null) ? SortOrder.of(sortOrderString) : SortOrder.UNSORTED;
         int result =  data1.getName().compareTo(data2.getName());
         if (result == 0) {
             int result2 = -3;
@@ -173,17 +196,5 @@ public class SortView implements Serializable {
             result = (sortOrder == SortOrder.DESCENDING) ? -result2 : result2;
         }
         return result;
-    }
-
-    public SortOrder getSortOrderName() {
-        return sortOrderName;
-    }
-
-    public DataTable getTable() {
-        return table;
-    }
-
-    public void setTable(DataTable table) {
-        this.table = table;
     }
 }

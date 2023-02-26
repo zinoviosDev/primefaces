@@ -23,21 +23,33 @@
                 <h5>Multiple Columns</h5>
                 <p>Use metakey to add a column to the sort selection.</p>
 
-                    <p:dataTable id="table" var="product" value="#{dtSortView.products}" sortMode="single" editable="true" binding="#{dtSortView.table}">
+                    <p:dataTable
+                            id="datatableId"
+                            var="product"
+                            value="#{dtSortView.products}"
+                            sortMode="single"
+                            editable="true"
+                            sortBy="#{dtSortView.sortBy}"
+                    >
 
                     <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update=":form:msgs"/>
                     <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update=":form:msgs"/>
                     <p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}" update=":form:msgs"/>
-                    <p:headerRow field="#{product.name}" groupBy="#{product}">
+                    <p:headerRow field="name">
                         <p:column colspan="4" style="text-align:left">
                             <h:outputText value="#{product.name}" />
                         </p:column>
                     </p:headerRow>
-                    <p:column id="productnamecolumnid" headerText="Name" sortBy="#{product}" sortOrder="#{dtSortView.sortOrderName}"
-                              sortFunction="#{dtSortView.sortByNameAndCodeLong}">
+                    <p:column
+                        id="productnamecolumnid"
+                        field="name"
+                        filterable="false"
+                        headerText="Name"
+                        sortOrder="asc"
+                    >
                         <h:outputText value="#{product.name}" />
                     </p:column>
-                    <p:column headerText="CodeLong" sortOrder="asc">
+                    <p:column headerText="CodeLong" field="codeLong" filterable="false" sortOrder="asc">
                         <h:outputText value="#{product.codeLong}"/>
                     </p:column>
                     <p:column headerText="Code" sortOrder="asc">
