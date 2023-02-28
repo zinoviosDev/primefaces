@@ -26,7 +26,7 @@ package org.primefaces.showcase.domain;
 import java.io.Serializable;
 import java.util.List;
 
-public class Product implements Serializable, Comparable<Product> {
+public class Product implements Serializable {
 
     private int id;
     private String code;
@@ -68,6 +68,17 @@ public class Product implements Serializable, Comparable<Product> {
     public Product clone() {
         return new Product(getId(), getCodeLong(), getName(), getDescription(), getImage(), getPrice(), getCategory(), getQuantity(),
                 getInventoryStatus(), getRating());
+    }
+
+    Product(Product p) {
+        this.id = p.getId();
+        this.codeLong = p.getCodeLong();
+        this.name = p.getName();
+        this.description = p.getDescription();
+        this.image = p.getImage();
+        this.price = p.getPrice();
+        this.category = p.getCategory();
+        this.quantity = p.getQuantity();
     }
 
     public int getId() {
@@ -165,50 +176,4 @@ public class Product implements Serializable, Comparable<Product> {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((code == null) ? 0 : code.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Product other = (Product) obj;
-        if (code == null) {
-            return other.code == null;
-        }
-        else {
-            return code.equals(other.code);
-        }
-    }
-    @Override
-    public int compareTo(Product o) {
-        if (o == null || this.name == null) {
-            return 1;
-        }
-        if (o.name == null) {
-            return -1;
-        }
-        int result = this.name.compareTo(o.name);
-        if (result == 0) {
-            if (o.codeLong == null || this.codeLong == null) {
-                return this.codeLong == null ? (o.codeLong == null ? 0 : 1) : -1;
-            }
-            result = this.codeLong.compareTo(o.codeLong);
-        }
-        return result;
-    }
-
 }

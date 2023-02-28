@@ -5,6 +5,10 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
+
+    <f:facet name="last">
+        <h:outputStylesheet library="showcase" name="css/yourstyles.css"/>
+    </f:facet>
     <ui:define name="title">
         DataTable <span class="subitem">Sort</span>
     </ui:define>
@@ -17,27 +21,48 @@
     <ui:param name="widgetLink" value="DataTable-1"/>
 
     <ui:define name="implementation">
+        <style>
+            .ui-rowgroup-header, .ui-datatable-headerrow {
+                color: white;
+                background-color: mediumblue;
+            }
+        </style>
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
             <div class="card">
                 <h5>Multiple Columns</h5>
                 <p>Use metakey to add a column to the sort selection.</p>
 
-                    <p:dataTable
-                            id="datatableId"
-                            var="product"
-                            value="#{dtSortView.products}"
-                            sortMode="single"
-                            editable="true"
-                            sortBy="#{dtSortView.sortBy}"
-                    >
+                <p:dataTable
+                        id="datatableId"
+                        var="product"
+                        value="#{dtSortView.products}"
+                        sortMode="single"
+                        editable="true"
+                        sortBy="#{dtSortView.sortBy}"
+                >
 
                     <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update=":form:msgs"/>
                     <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update=":form:msgs"/>
                     <p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}" update=":form:msgs"/>
                     <p:headerRow field="name">
-                        <p:column colspan="4" style="text-align:left">
-                            <h:outputText value="#{product.name}" />
+                        <p:column style="text-align:left">
+                            <h:outputText value="#{product.name}"/>
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <h:outputText value="#{product.codeLong}"/>
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <h:outputText value="#{product.code}"/>
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <h:outputText value="#{product.category}"/>
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <h:outputText value="#{product.quantity}"/>
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <h:outputText value="#{product.price}"/>
                         </p:column>
                     </p:headerRow>
                     <p:column
@@ -52,7 +77,7 @@
                     <p:column headerText="CodeLong" field="codeLong" filterable="false" sortOrder="asc">
                         <h:outputText value="#{product.codeLong}"/>
                     </p:column>
-                    <p:column headerText="Code" sortOrder="asc">
+                    <p:column headerText="Code" field="code" filterable="false">
                         <p:cellEditor>
                             <f:facet name="output">
                                 <h:outputText value="#{product.code}"/>
@@ -62,15 +87,15 @@
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
-                    <p:column headerText="Category" sortBy="#{product.category}">
+                    <p:column headerText="Category" field="category" filterable="false">
                         <h:outputText value="#{product.category}"/>
                     </p:column>
 
-                    <p:column headerText="Quantity" sortBy="#{product.quantity}">
+                    <p:column headerText="Quantity" field="quantity" filterable="false">
                         <h:outputText value="#{product.quantity}"/>
                     </p:column>
 
-                    <p:column headerText="Price" sortBy="#{product.price}">
+                    <p:column headerText="Price" field="price" filterable="false">
                         <h:outputText value="#{product.price}">
                             <f:convertNumber type="currency" currencySymbol="$"/>
                         </h:outputText>
