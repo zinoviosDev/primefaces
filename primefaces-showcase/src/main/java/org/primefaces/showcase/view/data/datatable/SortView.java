@@ -38,10 +38,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Named("dtSortView")
 @ViewScoped
@@ -55,9 +56,14 @@ public class SortView implements Serializable {
 
     @Inject
     private ProductService service;
+    private Comparator<Product> productComparatorByName;
+    private Comparator<Product> productComparatorByNameAndCodeLong;
 
     @PostConstruct
     public void init() {
+        productComparatorByName = Comparator.comparing(Product::getName, Comparator.nullsFirst(String::compareTo));
+        productComparatorByNameAndCodeLong = Comparator.comparing(Product::getName, Comparator.nullsFirst(String::compareTo))
+                .thenComparing(Product::getCodeLong, Comparator.nullsFirst(Long::compareTo));
         products = service.getProducts(10);
         products1 = service.getProducts(10);
         products2 = service.getProducts(10);
@@ -70,19 +76,19 @@ public class SortView implements Serializable {
                 "Accessories", 12, InventoryStatus.INSTOCK, 4));
         products.add(new Product(47, 445L, "Black Watch", "Product Description", "black-watch.jpg", 32,
                 "Accessories", 13, InventoryStatus.INSTOCK, 4));
-        sortProductsByNameAndCodeLong();
-        sortBy = new ArrayList<>();
-        sortBy.add(SortMeta.builder()
-                .field("name")
-                .order(SortOrder.ASCENDING)
-                .build());
+        Collections.sort(products, productComparatorByNameAndCodeLong);
+        sortBy = Arrays.asList(
+                SortMeta.builder().field("name").order(SortOrder.ASCENDING).priority(1).build(),
+                SortMeta.builder().field("codeLong").order(SortOrder.ASCENDING).priority(2).build()
+        );
     }
 
-    private void sortProductsByNameAndCodeLong() {
-        Collections.sort(products, Comparator.comparing(Product::getName, Comparator.nullsFirst(String::compareTo))
-                .thenComparing(Product::getCodeLong, Comparator.nullsFirst(Long::compareTo)));
+    public int sortByName(Object p1, Object p2) {
+        return Objects.compare((Product) p1, (Product) p2, productComparatorByName);
+    }
 
-
+    public int sortByNameAndCodeLong(Object p1, Object p2) {
+        return Objects.compare((Product) p1, (Product) p2, productComparatorByNameAndCodeLong);
     }
 
     public List<Product> getProducts() {

@@ -66,15 +66,24 @@
                         </p:column>
                     </p:headerRow>
                     <p:column
-                        id="productnamecolumnid"
-                        field="name"
-                        filterable="false"
-                        headerText="Name"
-                        sortOrder="asc"
+                            id="productnamecolumnid"
+                            field="name"
+                            filterable="false"
+                            groupRow="true"
+                            headerText="Name"
+                            sortOrder="asc"
                     >
-                        <h:outputText value="#{product.name}" />
+                        <h:outputText value="#{product.name}"/>
                     </p:column>
-                    <p:column headerText="CodeLong" field="codeLong" filterable="false" sortOrder="asc">
+                    <p:column
+                            headerText="CodeLong"
+                            field="codeLong"
+                            filterable="false"
+                            groupRow="false"
+                            sortBy="#{product}"
+                            sortFunction="#{dtSortView.sortByNameAndCodeLong}"
+                            sortOrder="asc"
+                    >
                         <h:outputText value="#{product.codeLong}"/>
                     </p:column>
                     <p:column headerText="Code" field="code" filterable="false">
